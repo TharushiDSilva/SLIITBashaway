@@ -1,28 +1,16 @@
 #!/bin/bash
 
-# Check if out directory exists, if not, create it
-if [ ! -d "./out" ]; then
-    mkdir ./out
+# Directory to store the log file (change if needed)
+OUT_DIR="./out"
+
+# Create the out directory if it doesn't exist
+if [ ! -d "$OUT_DIR" ]; then
+    mkdir "$OUT_DIR"
 fi
 
-# Initialize the output log file
-COMMIT_LOG="./out/commits.txt"
+# Path to the log file
+COMMIT_LOG="$OUT_DIR/commits.txt"
 
-# Function to log commits into commits.txt
-log_commit() {
-    git log --pretty=format:"%H - %an, %ar : %s" > "$COMMIT_LOG"
-}
-
-# Check if the git repository exists
-if [ ! -d ".git" ]; then
-    echo "This is not a git repository."
-    exit 1
-fi
-
-# Log the commits
-log_commit
-
-# Provide feedback that the script ran successfully
-echo "Commits have been logged in $COMMIT_LOG"
-
-
+# Log the latest commit details
+git log -1 --pretty=format:"%H - %an, %ar : %s" >> "$COMMIT_LOG"
+echo "" >> "$COMMIT_LOG"  # Add a new line to separate entries
